@@ -1,6 +1,5 @@
 // controllers/sampleController.js
 
-// Aquí puedes requerir tus modelos de Mongoose si necesitas interactuar con la base de datos.
 
 // Un controlador de ejemplo para la ruta raíz
 exports.home = (req, res) => {

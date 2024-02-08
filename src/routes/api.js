@@ -1,15 +1,17 @@
 // routes/api.js
+// Importa los controladores que necesitas
+const gameController = require('../controllers/gameController');
+const sampleController = require('../controllers/sampleController');
 
 const express = require('express');
 const router = express.Router();
 
-// Importa los controladores que necesitas
-const sampleController = require('../controllers/sampleController');
 
 // Definir las rutas de la API
-router.get('/', sampleController.home);
-router.get('/items', sampleController.listItems);
-router.post('/items', sampleController.createItem);
+//Top 10 juegos de acción
+router.get('/top-action-games', gameController.findTopActionGames);
+
+
 
 // Exporta el router para que pueda ser utilizado en app.js
 module.exports = router;
