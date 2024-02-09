@@ -97,3 +97,73 @@ exports.findTopArcadeGames = async (req, res) => {
     res.status(500).send(err.message);
   }
 };
+
+//Top los mejores generos segun el promedio de sus ratings:
+exports.findTopGenresAcordingAVGRating =async (req, res) => {
+  try{
+    const topGenresAccordingAVGRate = await Games.aggregate([ { $unwind: "$genres" },{ $group: { _id: "$genres.name", avgRating: { $avg: "$rating" } } }, { $sort: { avgRating: -1 } }]);
+    res.json(topGenresAccordingAVGRate);
+    console.log("TOPGENRESACORDINGAVGRATING",topGenresAccordingAVGRate);
+  }catch(err){
+    res.status(500).send(err.message);
+  }
+};
+
+//los mejores generos segun metacritic:
+exports.findTopGenresAccordingMetacritic = async (req, res) => {
+  try{
+    const topGenresAccordingMetacritic = await Games.aggregate([
+      { $unwind: "$genres" }, 
+      { 
+        $group: { 
+          _id: "$genres.name", 
+          avgMetacritic: { $avg: "$metacritic" }     } 
+      },
+      { $sort: { avgMetacritic: -1 } } ]);
+    res.json(topGenresAccordingMetacritic);
+    console.log("TOPGENRESACORDINGMETACRITIC",topGenresAccordingMetacritic);
+    
+  }catch(err){
+    res.status(500).send(err.message);
+  }
+};
+
+//Las plataformas con más juegos:
+exports.findPlatformsGames = async (req,res) =>{
+  try{
+    const PlatformGames = await Games.aggregate([
+      { $unwind: "$platforms" },   { 
+        $group: { 
+          _id: "$platforms.platform.name", 
+          count: { $sum: 1 }     } 
+      },
+      { $sort: { count: -1 } } ]);
+      res.json(PlatformGames);
+      console.log("PLATFORMGAMES",PlatformGames );
+  }
+  catch(err){
+    res.status(500).send(err, message);
+  }
+};
+
+//Los 10 mejores juegos más recientes:
+exports.findRecentGames = async (req,res) =>{
+  try{
+    const RecentGames = await Games.find({}, {"name":1, "released":1, "rating":1,"_id":0}).sort({"released": -1, "rating":-1}).limit(10);
+    res.json(RecentGames);
+    console.log("RECENTGAMES", RecentGames);
+  }catch(err){
+    res.status(500).send(err,message);
+  }
+};
+
+//Los 10 peores juegos: excluyendo los que tienen 0 en rating
+exports.findWorstGames = async(req,res)=>{
+  try{
+    const WorstGames = await Games.find({ "rating": { $ne: 0 } }, { "name": 1, "rating": 1, "_id": 0 }).sort({"rating":1}).limit(10);
+    res.json(WorstGames);
+    console.log("WORSTGAMES", WorstGames );
+  }catch(err){
+    res.status(500).send(err,message);
+  }
+};
