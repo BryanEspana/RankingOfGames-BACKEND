@@ -4,7 +4,7 @@ const Games = require('../models/games')
 //Top 10 mejores juegos en general
 exports.findTopGames = async (req, res) => {
   try{
-    const topGames = await Games.find({}, { "name": 1, "released": 1, "background_image": 1, "rating": 1, "genres.name": 1, "_id": 0 })
+    const topGames = await Games.find({}, { "name": 1, "released": 1, "background_image": 1, "rating": 1, "genres.name": 1, "_id": 1 })
     .sort({ "rating": -1 })
     .limit(10); 
     res.json(topGames);
@@ -30,7 +30,7 @@ exports.findTopActionGames = async (req, res) => {
           "background_image": 1,
           "rating": 1,
           "genre": "$genres.name",
-          "_id": 0
+          "_id": 1
         }
       },
       { 
@@ -62,7 +62,7 @@ exports.findTopAdventureGames = async (req, res) => {
           "background_image": 1,
           "rating": 1,
           "genre": "$genres.name",
-          "_id": 0
+          "_id": 1
         }
       },
       { 
@@ -95,7 +95,7 @@ exports.findTopShooterGames = async (req, res) => {
           "background_image": 1,
           "rating": 1,
           "genre": "$genres.name",
-          "_id": 0
+          "_id": 1
         }
       },
       { 
@@ -128,7 +128,7 @@ exports.findTopSportsGames = async (req, res) => {
           "background_image": 1,
           "rating": 1,
           "genre": "$genres.name",
-          "_id": 0
+          "_id": 1
         }
       },
       { 
@@ -160,7 +160,7 @@ exports.findTopArcadeGames = async (req, res) => {
           "background_image": 1,
           "rating": 1,
           "genre": "$genres.name",
-          "_id": 0
+          "_id": 1
         }
       },
       { 
@@ -229,7 +229,7 @@ exports.findPlatformsGames = async (req,res) =>{
 //Los 10 mejores juegos más recientes:
 exports.findRecentGames = async (req,res) =>{
   try{
-    const RecentGames = await Games.find({}, {"name":1, "released":1, "rating":1, "background_image":1, "genre": "$genres.name", "_id":0})
+    const RecentGames = await Games.find({}, {"name":1, "released":1, "rating":1, "background_image":1, "genre": "$genres.name", "_id":1})
     .sort({"released": -1, "rating":-1})
     .limit(10);  
     res.json(RecentGames);
@@ -242,7 +242,7 @@ exports.findRecentGames = async (req,res) =>{
 //Los 10 peores juegos: excluyendo los que tienen 0 en rating
 exports.findWorstGames = async(req,res)=>{
   try{
-    const WorstGames = await Games.find({ "rating": { $ne: 0 } }, { "name": 1, "released": 1, "rating": 1, "background_image": 1, "genre": "$genres.name", "_id": 0 })
+    const WorstGames = await Games.find({ "rating": { $ne: 0 } }, { "name": 1, "released": 1, "rating": 1, "background_image": 1, "genre": "$genres.name", "_id": 1 })
     .sort({"rating": 1})
     .limit(10);
     res.json(WorstGames);
@@ -285,12 +285,13 @@ exports.findTopPlayedGames = async(req,res)=>{
     const TopPlayedGames = await Games.aggregate([
       {
         $group: {
-          _id: "$name",
+          _id: "$_id", 
+          name: { $first: "$name" }, 
           totalPlaytime: { $sum: "$playtime" },
           rating: { $first: "$rating" },
           released: { $first: "$released" },
           background_images: { $first: "$background_images" },
-          genre: { $addToSet: "$genres.name" } // Agrega solo el nombre del género al conjunto
+          genre: { $addToSet: "$genres.name" } 
         }
       },
       {
@@ -300,6 +301,7 @@ exports.findTopPlayedGames = async(req,res)=>{
         $limit: 10
       }
     ]);
+    
     res.json(TopPlayedGames);
     console.log("TOPPLAYEDGAMES",TopPlayedGames); 
   }catch(err){
@@ -321,7 +323,7 @@ exports.findTopRecentGames = async(req,res)=>{
           "released": 1,
           "background_image": 1,
           "genres.name": 1,
-          "_id": 0
+          "_id": 1
         }
       },
       {
@@ -338,10 +340,11 @@ exports.findTopRecentGames = async(req,res)=>{
 //TRENDING
 exports.findTrending = async(req,res)=>{
   try{
-    const Trending = await Games.find({ "rating": { $gt: 4 }, "released": { $regex: /^2024/ } }, { "name": 1, "released": 1, "rating": 1, "background_image": 1, "genre": "$genres.name", "_id": 0 }).sort({ "released": -1, "rating": -1 }).limit(10);
+    const Trending = await Games.find({ "rating": { $gt: 4 }, "released": { $regex: /^2024/ } }, { "name": 1, "released": 1, "rating": 1, "background_image": 1, "genre": "$genres.name", "_id": 1 }).sort({ "released": -1, "rating": -1 }).limit(10);
     res.json(Trending);
     console.log("TRENDING", Trending);
   }catch(err){
     res.status(500).send(err,message);
   }
 };
+
