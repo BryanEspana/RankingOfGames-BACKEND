@@ -251,3 +251,86 @@ exports.findWorstGames = async(req,res)=>{
     res.status(500).send(err,message);
   }
 };
+
+//Generos más jugados
+exports.findTopPlayedGenres = async(req,res)=>{
+  try{
+    const TopPlayedGenres = await Games.aggregate([
+      {
+        $unwind: "$genres" 
+      },
+      {
+        $group: {
+          _id: "$genres.name", 
+          totalPlaytime: { $sum: "$playtime" } 
+        }
+      },
+      {
+        $sort: { totalPlaytime: -1 } 
+      },
+      {
+        $limit: 10 
+      }
+    ]);
+    res.json(TopPlayedGenres);
+    console.log("TOPPLAYEDGENRES", TopPlayedGenres );
+  }catch(err){
+    res.status(500).send(err,message);
+  }
+};
+
+//juegos más jugados
+exports.findTopPlayedGames = async(req,res)=>{
+  try{
+    const TopPlayedGames = await Games.aggregate([
+      {
+        $group: {
+          _id: "$name",
+          totalPlaytime: { $sum: "$playtime" },
+          rating: { $first: "$rating" },
+          released: { $first: "$released" },
+          background_images: { $first: "$background_images" },
+          genre: { $addToSet: "$genres.name" } // Agrega solo el nombre del género al conjunto
+        }
+      },
+      {
+        $sort: { totalPlaytime: -1 }
+      },
+      {
+        $limit: 10
+      }
+    ]);
+    res.json(TopPlayedGames);
+    console.log("TOPPLAYEDGAMES",TopPlayedGames); 
+  }catch(err){
+    res.status(500).send(err,message);
+  }
+};
+
+//Top recent games
+exports.findTopRecentGames = async(req,res)=>{
+  try{
+    const MostRecentGames= await Games.aggregate([
+      {
+        $sort: { "rating": -1, "released": -1 } 
+      },
+      {
+        $project: {
+          "name": 1,
+          "rating": 1,
+          "released": 1,
+          "background_image": 1,
+          "genres.name": 1,
+          "_id": 0
+        }
+      },
+      {
+        $limit: 10 
+      }
+    ]);
+    res.json(MostRecentGames);
+    console.log("MOSTRECENTGAMES", MostRecentGames );
+  }catch(err){
+    res.status(500).send(err.message);
+  }
+};

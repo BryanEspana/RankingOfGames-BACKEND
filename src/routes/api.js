@@ -40,5 +40,14 @@ router.get('/recent-games',gameController.findRecentGames);
 
 //Los 10 peores juegos: excluyendo los que tienen 0 en rating
 router.get("/worst-games", gameController.findWorstGames);
+
+//generos más jugados
+router.get('/most-played-genres', gameController.findTopPlayedGenres);
+
+//Juegos más jugados
+router.get('/most-played-games', gameController.findTopPlayedGames);
+
+//juegos tendencia
+router.get('/top-recent-games', gameController.findTopRecentGames);
 // Exporta el router para que pueda ser utilizado en app.js
 module.exports = router;
