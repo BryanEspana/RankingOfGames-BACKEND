@@ -49,5 +49,8 @@ router.get('/most-played-games', gameController.findTopPlayedGames);
 
 //juegos tendencia
 router.get('/top-recent-games', gameController.findTopRecentGames);
+
+//Trending
+router.get('/trending', gameController.findTrending);
 // Exporta el router para que pueda ser utilizado en app.js
 module.exports = router;

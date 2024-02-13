@@ -334,3 +334,14 @@ exports.findTopRecentGames = async(req,res)=>{
     res.status(500).send(err.message);
   }
 };
+
+//TRENDING
+exports.findTrending = async(req,res)=>{
+  try{
+    const Trending = await Games.find({ "rating": { $gt: 4 }, "released": { $regex: /^2024/ } }, { "name": 1, "released": 1, "rating": 1, "background_image": 1, "genre": "$genres.name", "_id": 0 }).sort({ "released": -1, "rating": -1 }).limit(10);
+    res.json(Trending);
+    console.log("TRENDING", Trending);
+  }catch(err){
+    res.status(500).send(err,message);
+  }
+};
