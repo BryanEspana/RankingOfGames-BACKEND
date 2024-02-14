@@ -348,3 +348,37 @@ exports.findTrending = async(req,res)=>{
   }
 };
 
+//GAME INFO
+exports.findGameById = async (req, res) => {
+  try {
+    const gameId = req.params.id; 
+    const gameInfo = await Games.findOne(
+      { "_id": gameId },
+      {
+        "_id": 1,
+        "name": 1,
+        "rating": 1,
+        "released": 1,
+        "background_image": 1,
+        "genres.name": 1,
+        "platforms.name": 1,
+        "reviews_count": 1,
+        "short_screenshots": 1,
+        "ratings": 1
+      }
+    );
+
+    if (!gameInfo) {
+      return res.status(404).json({ message: "Juego no encontrado" });
+    }
+
+    res.json(gameInfo);
+    console.log("Información del juego:", gameInfo);
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).send({ error: "Error en el servidor" });
+  }
+};
+
+
+
