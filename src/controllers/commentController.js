@@ -6,6 +6,8 @@ exports.showComments = async (req, res) => {
         res.json(Comentarios);
         console.log("Comments", Comentarios);
     } catch (err) {
-        res.status(500).send(err.message);
+        console.error("Error al obtener comentarios:", err);
+        res.status(500).json({ error: "Hubo un problema al obtener los comentarios" });
     }
-}
+};
+
