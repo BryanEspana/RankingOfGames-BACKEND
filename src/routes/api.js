@@ -1,6 +1,7 @@
 // routes/api.js
 // Importa los controladores que necesitas
 const gameController = require('../controllers/gameController');
+const commentController = require('../controllers/commentController');
 const sampleController = require('../controllers/sampleController');
 
 const express = require('express');
@@ -55,5 +56,7 @@ router.get('/trending', gameController.findTrending);
 
 //GAME INFO
 router.get('/games/:id',gameController.findGameById);
+//comentarios
+router.get('/comentarios',commentController.showComments);
 // Exporta el router para que pueda ser utilizado en app.js
 module.exports = router;

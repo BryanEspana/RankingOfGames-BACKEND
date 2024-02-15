@@ -3,7 +3,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const app = express();
-const Game = require('./models/games'); // Ajusta la ruta según sea necesario
 const db = mongoose.connection;
 mongoose.connect(process.env.MONGODB_URI);
 db.on('error', console.error.bind(console, 'connection error:'));
