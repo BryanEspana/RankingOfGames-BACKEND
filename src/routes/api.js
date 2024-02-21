@@ -63,5 +63,11 @@ router.get('/games/:id/get-comments', commentController.getCommentsByGameId);
 
 // Ruta para agregar un comentario a un juego específico
 router.post('/games/:id/add-comments', commentController.addCommentToGame);
+
+//Ruta para eliminar un comentario
+router.delete('/games/:id/delete-comments', commentController.deleteComment);
+
+// Ruta para actualizar un comentario específico por su _id
+router.put('/games/:id/update-comments', commentController.updateCommentById);
 // Exporta el router para que pueda ser utilizado en app.js
 module.exports = router;
