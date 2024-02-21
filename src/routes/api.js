@@ -58,10 +58,10 @@ router.get('/trending', gameController.findTrending);
 router.get('/games/:id',gameController.findGameById);
 
 // Ruta para obtener comentarios de un juego específico
-router.get('/games/:id/comments', commentController.getCommentsByGameId);
+router.get('/games/:id/get-comments', commentController.getCommentsByGameId);
 
 
 // Ruta para agregar un comentario a un juego específico
-router.post('/games/:id/comments', commentController.addCommentToGame);
+router.post('/games/:id/add-comments', commentController.addCommentToGame);
 // Exporta el router para que pueda ser utilizado en app.js
 module.exports = router;
