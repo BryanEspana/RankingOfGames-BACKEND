@@ -59,8 +59,8 @@ router.get('/games/:id',gameController.findGameById);
 // Ruta para obtener comentarios por gameId
 router.post('/games/get-comments', commentController.getCommentsByGameId);
 
-// Ruta para eliminar comentario
-router.delete('/games/delete-comments', commentController.deleteComments);
+// Ruta para eliminar un comentario por su _id
+router.delete('/games/comments/:comentarioId', commentController.deleteCommentById);
 
 // Ruta para añadir comentarios a un juego
 router.post('/games/add-comment', commentController.addComments);

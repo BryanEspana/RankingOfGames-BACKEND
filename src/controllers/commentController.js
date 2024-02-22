@@ -20,13 +20,13 @@ exports.getCommentsByGameId = async (req, res) => {
   }
 };
 
-// Eliminar comentario por _id
-exports.deleteComments = async (req, res) => {
+// Eliminar comentario por su _id
+exports.deleteCommentById = async (req, res) => {
   try {
-    const { _id } = req.body;
+    const comentarioId = req.params.comentarioId; // Obtiene el comentarioId de los parámetros de la URL
 
     // Busca y elimina el comentario por su _id
-    const comentarioEliminado = await Comments.findByIdAndDelete(_id);
+    const comentarioEliminado = await Comments.findByIdAndDelete(comentarioId);
 
     if (!comentarioEliminado) {
       return res.status(404).json({ error: 'Comentario no encontrado' });
