@@ -42,8 +42,7 @@ exports.deleteComments = async (req, res) => {
 // Agregar un nuevo comentario a un juego específico
 exports.addComments = async (req, res) => {
   try {
-    const { title, rating, description } = req.body;
-    const gameId = req.params.gameId; // Obtiene el gameId de los parámetros de la URL
+    const { gameId, title, rating, description } = req.body;
 
     // Crea un nuevo comentario asociado al gameId del juego
     const nuevoComentario = new Comments({
@@ -63,22 +62,30 @@ exports.addComments = async (req, res) => {
   }
 };
 
-// Controlador para actualizar un comentario por su _id
+
+// Actualizar un comentario existente por su _id
 exports.updateCommentById = async (req, res) => {
   try {
-      const commentId = req.params.id;
-      const { title, rating, description } = req.body;
+    const { _id, title, rating, description } = req.body;
 
-      // Buscar el comentario por su _id y actualizarlo
-      const updatedComment = await Comments.findByIdAndUpdate(commentId, { title, rating, description }, { new: true });
+    // Busca el comentario por su _id en la base de datos
+    let comentario = await Comments.findById(_id);
 
-      if (!updatedComment) {
-          return res.status(404).json({ message: "Comentario no encontrado" });
-      }
+    if (!comentario) {
+      return res.status(404).json({ error: 'Comentario no encontrado' });
+    }
 
-      res.status(200).json(updatedComment);
-  } catch (err) {
-      console.error("Error:", err);
-      res.status(500).send({ error: "Error en el servidor" });
+    // Actualiza los campos del comentario con los nuevos valores
+    comentario.title = title;
+    comentario.rating = rating;
+    comentario.description = description;
+
+    // Guarda el comentario actualizado en la base de datos
+    await comentario.save();
+
+    res.json({ mensaje: 'Comentario actualizado correctamente', comentario });
+  } catch (error) {
+    console.error('Error al actualizar comentario:', error);
+    res.status(500).json({ error: 'Error al actualizar comentario' });
   }
 };
