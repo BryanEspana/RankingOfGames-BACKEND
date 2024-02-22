@@ -3,55 +3,63 @@ const Comments = require('../models/comments')
 // Obtener comentarios por ID de juego
 exports.getCommentsByGameId = async (req, res) => {
   try {
-    const { id } = req.body; // Obtener el ID del juego del cuerpo de la solicitud
-    const comments = await Comments.find({ gameId: id });
+      // Obtén el gameId del cuerpo de la solicitud
+      const { gameId } = req.body;
+      console.log("GAMEID",gameId);
 
-    res.status(200).json(comments);
-    console.log("Comentarios obtenidos con éxito", comments);
-  } catch (err) {
-    console.error("Error:", err);
-    res.status(500).send({ error: "Error en el servidor" });
+      // Busca todos los comentarios que coincidan con el gameId en la base de datos
+      const comentarios = await Comments.find({ gameId });
+
+      // Envía los comentarios encontrados como respuesta
+      res.json(comentarios);
+      console.log("COMENTARIOS",comentarios);
+  } catch (error) {
+      // Maneja los errores
+      console.error('Error al obtener comentarios:', error);
+      res.status(500).json({ error: 'Error al obtener comentarios' });
   }
 };
 
-//add a comment to a game
-exports.addCommentToGame = async (req, res) => {
+// Eliminar comentario por _id
+exports.deleteComments = async (req, res) => {
   try {
-    const { gameId, title, rating, description } = req.body;
+    const { _id } = req.body;
 
-    // Crear un nuevo comentario
-    const newComment = new Comments({
-      gameId, // gameId se obtiene del cuerpo de la solicitud
+    // Busca y elimina el comentario por su _id
+    const comentarioEliminado = await Comments.findByIdAndDelete(_id);
+
+    if (!comentarioEliminado) {
+      return res.status(404).json({ error: 'Comentario no encontrado' });
+    }
+
+    res.json({ mensaje: 'Comentario eliminado correctamente' });
+  } catch (error) {
+    console.error('Error al eliminar comentario:', error);
+    res.status(500).json({ error: 'Error al eliminar comentario' });
+  }
+};
+
+// Agregar un nuevo comentario a un juego específico
+exports.addComments = async (req, res) => {
+  try {
+    const { title, rating, description } = req.body;
+    const gameId = req.params.gameId; // Obtiene el gameId de los parámetros de la URL
+
+    // Crea un nuevo comentario asociado al gameId del juego
+    const nuevoComentario = new Comments({
+      gameId,
       title,
       rating,
       description
     });
 
-    // Guardar el comentario en la base de datos
-    await newComment.save();
+    // Guarda el comentario en la base de datos
+    await nuevoComentario.save();
 
-    res.status(201).json(newComment);
-  } catch (err) {
-    console.error("Error:", err);
-    res.status(500).send({ error: "Error en el servidor" });
-  }
-};
-
-exports.deleteComment = async (req, res) => {
-  try {
-    const { id } = req.params; // Obtener el ID del comentario de los parámetros de la URL
-
-    // Utilizar el método deleteOne de Mongoose para eliminar el comentario por su ID
-    const deletedComment = await Comments.deleteOne({ _id: id });
-
-    if (deletedComment.deletedCount === 0) {
-      return res.status(404).json({ message: "Comentario no encontrado" });
-    }
-
-    res.status(200).json({ message: "Comentario eliminado con éxito" });
-  } catch (err) {
-    console.error("Error:", err);
-    res.status(500).send({ error: "Error en el servidor" });
+    res.json({ mensaje: 'Comentario agregado correctamente', comentario: nuevoComentario });
+  } catch (error) {
+    console.error('Error al agregar comentario:', error);
+    res.status(500).json({ error: 'Error al agregar comentario' });
   }
 };
 

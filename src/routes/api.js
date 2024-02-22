@@ -2,7 +2,6 @@
 // Importa los controladores que necesitas
 const gameController = require('../controllers/gameController');
 const commentController = require('../controllers/commentController');
-const sampleController = require('../controllers/sampleController');
 
 const express = require('express');
 const router = express.Router();
@@ -57,17 +56,16 @@ router.get('/trending', gameController.findTrending);
 //GAME INFO
 router.get('/games/:id',gameController.findGameById);
 
-// Ruta para obtener comentarios de un juego específico
-router.get('/games/:id/get-comments', commentController.getCommentsByGameId);
+// Ruta para obtener comentarios por gameId
+router.post('/games/get-comments', commentController.getCommentsByGameId);
 
+// Ruta para eliminar comentario
+router.delete('/games/delete-comments', commentController.deleteComments);
 
-// Ruta para agregar un comentario a un juego específico
-router.post('/games/:id/add-comments', commentController.addCommentToGame);
-
-//Ruta para eliminar un comentario
-router.delete('/games/:id/delete-comments', commentController.deleteComment);
+// Ruta para añadir comentarios a un juego
+router.post('/games/add-comment', commentController.addComments);
 
 // Ruta para actualizar un comentario específico por su _id
-router.put('/games/:id/update-comments', commentController.updateCommentById);
+router.put('/games/update-comments', commentController.updateCommentById);
 // Exporta el router para que pueda ser utilizado en app.js
 module.exports = router;
