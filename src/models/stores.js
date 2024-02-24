@@ -6,7 +6,8 @@ const StoresSchema = new mongoose.Schema({
     domain: String,
     slug: String,
     game_count: Number,
-    image: String
+    image: String,
+    games: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Games' }]
 });
 
 const Stores = mongoose.model('Stores', StoresSchema, 'Stores');

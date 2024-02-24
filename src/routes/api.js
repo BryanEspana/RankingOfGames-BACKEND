@@ -70,5 +70,35 @@ router.put('/games/update-comments', commentController.updateCommentById);
 
 //Ruta para obtener la tienda por id
 router.get('/stores/:id', storesController.getStoreById);
+
+// Ruta para obtener los juegos de la tienda Steam
+router.get('/stores/games/steam', gameController.findSteamGames);
+
+// Ruta para obtener los juegos de la tienda XBOX Store
+router.get('/stores/games/xbox-store', gameController.findXBOXGames);
+
+// Ruta para obtener los juegos de la tienda Playstation Store
+router.get('/stores/games/playstation-store', gameController.findPlayStationGames);
+
+//Ruta para obtener los juegos de appstore
+router.get('/stores/games/app-store', gameController.findAppStoreGames);
+
+//Ruta para obtener los juegos de GOG
+router.get('/stores/games/gog', gameController.findGOGStoreGames);
+
+//Ruta para obtener los juegos de Nintendo
+router.get('/stores/games/nintendo', gameController.findNintendoStoreGames);
+
+//router para obtener los juegos de zbox360
+router.get('/stores/games/xbox360', gameController.findXbox360Games);
+
+//ruta para obtener los juegos de google play
+router.get('/stores/games/google-play', gameController.findGooglePlayGames);
+
+//ruta para obtener los juegos de ITCH
+router.get('/stores/games/itch', gameController.findITCHGames);
+
+//ruta para obtener los juegos de epic games
+router.get('/stores/games/epic-games', gameController.findEpicStooreGames);
 // Exporta el router para que pueda ser utilizado en app.js
 module.exports = router;
