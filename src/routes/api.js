@@ -2,7 +2,7 @@
 // Importa los controladores que necesitas
 const gameController = require('../controllers/gameController');
 const commentController = require('../controllers/commentController');
-
+const storesController = require('../controllers/storesController');
 const express = require('express');
 const router = express.Router();
 
@@ -67,5 +67,8 @@ router.post('/games/add-comment', commentController.addComments);
 
 // Ruta para actualizar un comentario específico por su _id
 router.put('/games/update-comments', commentController.updateCommentById);
+
+//Ruta para obtener la tienda por id
+router.get('/stores/:id', storesController.getStoreById);
 // Exporta el router para que pueda ser utilizado en app.js
 module.exports = router;
