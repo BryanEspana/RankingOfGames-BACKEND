@@ -382,4 +382,486 @@ exports.findGameById = async (req, res) => {
 };
 
 
+// Obtener juegos de la tienda Steam
+exports.findSteamGames = async (req, res) => {
+  try {
+    const steamGames = await Games.aggregate([
+      {
+        $match: {
+          "stores.store.id": 1 // Filtrar por el ID de la tienda Steam
+        }
+      },
+      {
+        $project: {
+          "_id": 1,
+          "name": 1,
+          "rating": 1,
+          "released": 1,
+          "background_image": 1,
+          "genres.name": 1,
+          "platforms.platform": 1,
+          "reviews_count": 1,
+          "short_screenshots": 1,
+          "ratings": 1,
+          "stores": {
+            $filter: {
+              input: "$stores",
+              as: "store",
+              cond: { $eq: ["$$store.store.id", 1] } // Filtrar las tiendas y quedarse con la tienda Steam
+            }
+          }
+        }
+      }
+    ]);
 
+    if (steamGames.length === 0) {
+      return res.status(404).json({ message: "No se encontraron juegos para la tienda Steam" });
+    }
+    console.log("Cantidad de juegos encontrados para la tienda Steam:", steamGames.length); // Imprimir la cantidad de juegos encontrados
+    res.json(steamGames);
+    //console.log("Juegos de la tienda Steam:", steamGames);
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).json({ error: "Error en el servidor" });
+  }
+};
+
+// Obtener juegos de la tienda xBOX STORE
+exports.findXBOXGames = async (req, res) => {
+  try {
+    const XBOXGames = await Games.aggregate([
+      {
+        $match: {
+          "stores.store.id": 2
+        }
+      },
+      {
+        $project: {
+          "_id": 1,
+          "name": 1,
+          "rating": 1,
+          "released": 1,
+          "background_image": 1,
+          "genres.name": 1,
+          "platforms.platform": 1,
+          "reviews_count": 1,
+          "short_screenshots": 1,
+          "ratings": 1,
+          "stores": {
+            $filter: {
+              input: "$stores",
+              as: "store",
+              cond: { $eq: ["$$store.store.id", 2] } // Filtrar las tiendas y quedarse con la tienda 
+            }
+          }
+        }
+      }
+    ]);
+
+    if (XBOXGames.length === 0) {
+      return res.status(404).json({ message: "No se encontraron juegos para la tienda XBOX store" });
+    }
+    console.log("Cantidad de juegos encontrados para la tienda XBOX store:", XBOXGames.length); // Imprimir la cantidad de juegos encontrados
+    res.json(XBOXGames);
+    //console.log("Juegos de la tienda Steam:", steamGames);
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).json({ error: "Error en el servidor" });
+  }
+};
+
+//Juegos de Playstation Store
+exports.findPlayStationGames = async (req, res) => {
+  try {
+    const PlayStationGames = await Games.aggregate([
+      {
+        $match: {
+          "stores.store.id": 3
+        }
+      },
+      {
+        $project: {
+          "_id": 1,
+          "name": 1,
+          "rating": 1,
+          "released": 1,
+          "background_image": 1,
+          "genres.name": 1,
+          "platforms.platform": 1,
+          "reviews_count": 1,
+          "short_screenshots": 1,
+          "ratings": 1,
+          "stores": {
+            $filter: {
+              input: "$stores",
+              as: "store",
+              cond: { $eq: ["$$store.store.id", 3] } // Filtrar las tiendas y quedarse con la tienda 
+            }
+          }
+        }
+      }
+    ]);
+
+    if (PlayStationGames.length === 0) {
+      return res.status(404).json({ message: "No se encontraron juegos para la tienda XBOX store" });
+    }
+    console.log("Cantidad de juegos encontrados para la tienda PlayStation store:", PlayStationGames.length); // Imprimir la cantidad de juegos encontrados
+    res.json(PlayStationGames);
+    //console.log("Juegos de la tienda Steam:", steamGames);
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).json({ error: "Error en el servidor" });
+  }
+};
+
+//JUEGOS APPSTORE
+exports.findAppStoreGames = async (req, res) => {
+  try {
+    const AppStoreGames = await Games.aggregate([
+      {
+        $match: {
+          "stores.store.id": 4
+        }
+      },
+      {
+        $project: {
+          "_id": 1,
+          "name": 1,
+          "rating": 1,
+          "released": 1,
+          "background_image": 1,
+          "genres.name": 1,
+          "platforms.platform": 1,
+          "reviews_count": 1,
+          "short_screenshots": 1,
+          "ratings": 1,
+          "stores": {
+            $filter: {
+              input: "$stores",
+              as: "store",
+              cond: { $eq: ["$$store.store.id", 4] } // Filtrar las tiendas y quedarse con la tienda 
+            }
+          }
+        }
+      }
+    ]);
+
+    if (AppStoreGames.length === 0) {
+      return res.status(404).json({ message: "No se encontraron juegos para la tienda AppStore" });
+    }
+    console.log("Cantidad de juegos encontrados para la tienda AppStore:", AppStoreGames.length); // Imprimir la cantidad de juegos encontrados
+    res.json(AppStoreGames);
+    //console.log("Juegos de la tienda Steam:", steamGames);
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).json({ error: "Error en el servidor" });
+  }
+};
+
+//juegos gog store
+exports.findGOGStoreGames = async (req, res) => {
+  try {
+    const GOGGames = await Games.aggregate([
+      {
+        $match: {
+          "stores.store.id": 5
+        }
+      },
+      {
+        $project: {
+          "_id": 1,
+          "name": 1,
+          "rating": 1,
+          "released": 1,
+          "background_image": 1,
+          "genres.name": 1,
+          "platforms.platform": 1,
+          "reviews_count": 1,
+          "short_screenshots": 1,
+          "ratings": 1,
+          "stores": {
+            $filter: {
+              input: "$stores",
+              as: "store",
+              cond: { $eq: ["$$store.store.id", 5] } // Filtrar las tiendas y quedarse con la tienda 
+            }
+          }
+        }
+      }
+    ]);
+
+    if (GOGGames.length === 0) {
+      return res.status(404).json({ message: "No se encontraron juegos para la tienda GOG" });
+    }
+    console.log("Cantidad de juegos encontrados para la tienda GOG:", GOGGames.length); // Imprimir la cantidad de juegos encontrados
+    res.json(GOGGames);
+    //console.log("Juegos de la tienda Steam:", steamGames);
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).json({ error: "Error en el servidor" });
+  }
+};
+
+//NINTENDO STORE
+exports.findAppStoreGames = async (req, res) => {
+  try {
+    const AppStoreGames = await Games.aggregate([
+      {
+        $match: {
+          "stores.store.id": 4
+        }
+      },
+      {
+        $project: {
+          "_id": 1,
+          "name": 1,
+          "rating": 1,
+          "released": 1,
+          "background_image": 1,
+          "genres.name": 1,
+          "platforms.platform": 1,
+          "reviews_count": 1,
+          "short_screenshots": 1,
+          "ratings": 1,
+          "stores": {
+            $filter: {
+              input: "$stores",
+              as: "store",
+              cond: { $eq: ["$$store.store.id", 4] } // Filtrar las tiendas y quedarse con la tienda 
+            }
+          }
+        }
+      }
+    ]);
+
+    if (AppStoreGames.length === 0) {
+      return res.status(404).json({ message: "No se encontraron juegos para la tienda AppStore" });
+    }
+    console.log("Cantidad de juegos encontrados para la tienda AppStore:", AppStoreGames.length); // Imprimir la cantidad de juegos encontrados
+    res.json(AppStoreGames);
+    //console.log("Juegos de la tienda Steam:", steamGames);
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).json({ error: "Error en el servidor" });
+  }
+};
+
+//juegos nintendo store
+exports.findNintendoStoreGames = async (req, res) => {
+  try {
+    const NintendoGames = await Games.aggregate([
+      {
+        $match: {
+          "stores.store.id": 6
+        }
+      },
+      {
+        $project: {
+          "_id": 1,
+          "name": 1,
+          "rating": 1,
+          "released": 1,
+          "background_image": 1,
+          "genres.name": 1,
+          "platforms.platform": 1,
+          "reviews_count": 1,
+          "short_screenshots": 1,
+          "ratings": 1,
+          "stores": {
+            $filter: {
+              input: "$stores",
+              as: "store",
+              cond: { $eq: ["$$store.store.id", 6] } // Filtrar las tiendas y quedarse con la tienda 
+            }
+          }
+        }
+      }
+    ]);
+
+    if (NintendoGames.length === 0) {
+      return res.status(404).json({ message: "No se encontraron juegos para la tienda Nintendo" });
+    }
+    console.log("Cantidad de juegos encontrados para la tienda Nintendo:", NintendoGames.length); // Imprimir la cantidad de juegos encontrados
+    res.json(NintendoGames);
+    //console.log("Juegos de la tienda Steam:", steamGames);
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).json({ error: "Error en el servidor" });
+  }
+};
+
+//xbox 360 store
+exports.findXbox360Games = async (req, res) => {
+  try {
+    const Xbox360Games = await Games.aggregate([
+      {
+        $match: {
+          "stores.store.id": 7
+        }
+      },
+      {
+        $project: {
+          "_id": 1,
+          "name": 1,
+          "rating": 1,
+          "released": 1,
+          "background_image": 1,
+          "genres.name": 1,
+          "platforms.platform": 1,
+          "reviews_count": 1,
+          "short_screenshots": 1,
+          "ratings": 1,
+          "stores": {
+            $filter: {
+              input: "$stores",
+              as: "store",
+              cond: { $eq: ["$$store.store.id", 7] } // Filtrar las tiendas y quedarse con la tienda 
+            }
+          }
+        }
+      }
+    ]);
+
+    if (Xbox360Games.length === 0) {
+      return res.status(404).json({ message: "No se encontraron juegos para la tienda Xbox360" });
+    }
+    console.log("Cantidad de juegos encontrados para la tienda Xbox360:", Xbox360Games.length); // Imprimir la cantidad de juegos encontrados
+    res.json(Xbox360Games);
+    //console.log("Juegos de la tienda Steam:", steamGames);
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).json({ error: "Error en el servidor" });
+  }
+};
+
+//GOOGLE PLAY STORE
+exports.findGooglePlayGames = async (req, res) => {
+  try {
+    const GooglePlayGames = await Games.aggregate([
+      {
+        $match: {
+          "stores.store.id": 8
+        }
+      },
+      {
+        $project: {
+          "_id": 1,
+          "name": 1,
+          "rating": 1,
+          "released": 1,
+          "background_image": 1,
+          "genres.name": 1,
+          "platforms.platform": 1,
+          "reviews_count": 1,
+          "short_screenshots": 1,
+          "ratings": 1,
+          "stores": {
+            $filter: {
+              input: "$stores",
+              as: "store",
+              cond: { $eq: ["$$store.store.id", 8] } // Filtrar las tiendas y quedarse con la tienda 
+            }
+          }
+        }
+      }
+    ]);
+
+    if (GooglePlayGames.length === 0) {
+      return res.status(404).json({ message: "No se encontraron juegos para la tienda Google PlayStore" });
+    }
+    console.log("Cantidad de juegos encontrados para la tienda Google PlayStore:", GooglePlayGames.length); // Imprimir la cantidad de juegos encontrados
+    res.json(GooglePlayGames);
+    //console.log("Juegos de la tienda Steam:", steamGames);
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).json({ error: "Error en el servidor" });
+  }
+};
+
+//ITCH STORE
+exports.findITCHGames = async (req, res) => {
+  try {
+    const ITCHGames = await Games.aggregate([
+      {
+        $match: {
+          "stores.store.id": 9
+        }
+      },
+      {
+        $project: {
+          "_id": 1,
+          "name": 1,
+          "rating": 1,
+          "released": 1,
+          "background_image": 1,
+          "genres.name": 1,
+          "platforms.platform": 1,
+          "reviews_count": 1,
+          "short_screenshots": 1,
+          "ratings": 1,
+          "stores": {
+            $filter: {
+              input: "$stores",
+              as: "store",
+              cond: { $eq: ["$$store.store.id", 9] } // Filtrar las tiendas y quedarse con la tienda 
+            }
+          }
+        }
+      }
+    ]);
+
+    if (ITCHGames.length === 0) {
+      return res.status(404).json({ message: "No se encontraron juegos para la tienda ITCH Store" });
+    }
+    console.log("Cantidad de juegos encontrados para la tienda ITCH Store:", ITCHGames.length); // Imprimir la cantidad de juegos encontrados
+    res.json(ITCHGames);
+    //console.log("Juegos de la tienda Steam:", steamGames);
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).json({ error: "Error en el servidor" });
+  }
+};
+
+//epic games store
+exports.findEpicStooreGames = async (req, res) => {
+  try {
+    const EpicGames = await Games.aggregate([
+      {
+        $match: {
+          "stores.store.id": 11
+        }
+      },
+      {
+        $project: {
+          "_id": 1,
+          "name": 1,
+          "rating": 1,
+          "released": 1,
+          "background_image": 1,
+          "genres.name": 1,
+          "platforms.platform": 1,
+          "reviews_count": 1,
+          "short_screenshots": 1,
+          "ratings": 1,
+          "stores": {
+            $filter: {
+              input: "$stores",
+              as: "store",
+              cond: { $eq: ["$$store.store.id", 11] } // Filtrar las tiendas y quedarse con la tienda 
+            }
+          }
+        }
+      }
+    ]);
+
+    if (EpicGames.length === 0) {
+      return res.status(404).json({ message: "No se encontraron juegos para la tienda Epic Games" });
+    }
+    console.log("Cantidad de juegos encontrados para la tienda Epic Games:", EpicGames.length); // Imprimir la cantidad de juegos encontrados
+    res.json(EpicGames);
+    //console.log("Juegos de la tienda Steam:", steamGames);
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).json({ error: "Error en el servidor" });
+  }
+};
