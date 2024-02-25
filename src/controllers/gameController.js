@@ -364,7 +364,8 @@ exports.findGameById = async (req, res) => {
         "platforms.platform": 1,
         "reviews_count": 1,
         "short_screenshots": 1,
-        "ratings": 1
+        "ratings": 1,
+        "stores": 1
       }
     );
 
