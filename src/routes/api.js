@@ -84,7 +84,7 @@ router.get('/stores/games/xbox-store', gameController.findXBOXGames);
 router.get('/stores/games/playstation-store', gameController.findPlayStationGames);
 
 //Ruta para obtener los juegos de appstore
-router.get('/stores/games/app-store', gameController.findAppStoreGames);
+router.get('/stores/games/apple-appstore', gameController.findAppStoreGames);
 
 //Ruta para obtener los juegos de GOG
 router.get('/stores/games/gog', gameController.findGOGStoreGames);
