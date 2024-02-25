@@ -16,3 +16,13 @@ exports.getStoreById = async (req, res) => {
         res.status(500).send(err.message);
     }
 };
+
+exports.getAllStores = async (req, res) => {
+    try {
+        const stores = await Stores.find({});
+        res.json(stores);
+        console.log("STORES", stores);
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+}

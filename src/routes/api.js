@@ -71,6 +71,9 @@ router.put('/games/update-comments', commentController.updateCommentById);
 //Ruta para obtener la tienda por id
 router.get('/stores/:id', storesController.getStoreById);
 
+//Ruta para obtener todas las tiendas
+router.get('/All-stores', storesController.getAllStores);
+
 // Ruta para obtener los juegos de la tienda Steam
 router.get('/stores/games/steam', gameController.findSteamGames);
 
