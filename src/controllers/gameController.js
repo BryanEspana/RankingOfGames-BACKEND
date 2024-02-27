@@ -384,11 +384,17 @@ exports.findGameById = async (req, res) => {
 
 // Obtener juegos de la tienda Steam
 exports.findSteamGames = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const pageSize = 20;
+  const totalGames = await Games.countDocuments({ "stores.store.id": 1 });
+  const totalPages = Math.ceil(totalGames / pageSize);
+
+  const skip = (page - 1) * pageSize;
   try {
     const steamGames = await Games.aggregate([
       {
         $match: {
-          "stores.store.id": 1 // Filtrar por el ID de la tienda Steam
+          "stores.store.id": 1 // Filtrar po  r el ID de la tienda Steam
         }
       },
       {
@@ -411,14 +417,19 @@ exports.findSteamGames = async (req, res) => {
             }
           }
         }
-      }
+      },
+      {$skip: skip},
+      {$limit: pageSize}
     ]);
 
     if (steamGames.length === 0) {
       return res.status(404).json({ message: "No se encontraron juegos para la tienda Steam" });
     }
     console.log("Cantidad de juegos encontrados para la tienda Steam:", steamGames.length); // Imprimir la cantidad de juegos encontrados
-    res.json(steamGames);
+    res.json({
+      games: steamGames,
+      totalPages: totalPages
+    });
     //console.log("Juegos de la tienda Steam:", steamGames);
   } catch (err) {
     console.error("Error:", err);
