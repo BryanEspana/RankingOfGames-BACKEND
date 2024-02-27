@@ -103,5 +103,19 @@ router.get('/stores/games/itch', gameController.findITCHGames);
 
 //ruta para obtener los juegos de epic games
 router.get('/stores/games/epic-games', gameController.findEpicStooreGames);
+
+// Ruta para agregar una respuesta a un comentario específico por su _id
+router.post('/games/comments/add-response/:comentarioId', commentController.addResponseToComment);
+
+// Ruta para eliminar una respuesta de un comentario por su _id y el _id de la respuesta
+router.delete('/games/comments/:comentarioId/responses/:respuestaId', commentController.deleteResponseFromComment);
+
+// Ruta para actualizar una respuesta de un comentario por su _id y el _id de la respuesta
+router.put('/games/comments/:comentarioId/responses/:respuestaId', commentController.updateResponseFromComment);
+
+// Ruta para obtener respuestas de un comentario por su _id
+router.post('/games/comments/get-responses', commentController.getResponsesByCommentId);
+
+
 // Exporta el router para que pueda ser utilizado en app.js
 module.exports = router;

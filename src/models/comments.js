@@ -8,7 +8,11 @@ const CommentsSchema = new mongoose.Schema({
       },
     title: String,
     rating: Number,
-    description: String
+    description: String,
+    respuestas: [{
+      user: { type: String, default: "anonimo" },
+      respuesta: String
+  }]
 });
 
 
