@@ -439,6 +439,12 @@ exports.findSteamGames = async (req, res) => {
 
 // Obtener juegos de la tienda xBOX STORE
 exports.findXBOXGames = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const pageSize = 20;
+  const totalGames = await Games.countDocuments({ "stores.store.id": 2 });
+  const totalPages = Math.ceil(totalGames / pageSize);
+
+  const skip = (page - 1) * pageSize;
   try {
     const XBOXGames = await Games.aggregate([
       {
@@ -466,14 +472,19 @@ exports.findXBOXGames = async (req, res) => {
             }
           }
         }
-      }
+      },
+      {$skip: skip},
+      {$limit: pageSize}
     ]);
 
     if (XBOXGames.length === 0) {
       return res.status(404).json({ message: "No se encontraron juegos para la tienda XBOX store" });
     }
     console.log("Cantidad de juegos encontrados para la tienda XBOX store:", XBOXGames.length); // Imprimir la cantidad de juegos encontrados
-    res.json(XBOXGames);
+    res.json({
+      games: XBOXGames,
+      totalPages: totalPages,
+    });
     //console.log("Juegos de la tienda Steam:", steamGames);
   } catch (err) {
     console.error("Error:", err);
@@ -483,6 +494,12 @@ exports.findXBOXGames = async (req, res) => {
 
 //Juegos de Playstation Store
 exports.findPlayStationGames = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const pageSize = 20;
+  const totalGames = await Games.countDocuments({ "stores.store.id": 3 });
+  const totalPages = Math.ceil(totalGames / pageSize);
+  const skip = (page - 1) * pageSize;
+
   try {
     const PlayStationGames = await Games.aggregate([
       {
@@ -510,14 +527,19 @@ exports.findPlayStationGames = async (req, res) => {
             }
           }
         }
-      }
+      },
+      {$skip: skip},
+      {$limit: pageSize}
     ]);
 
     if (PlayStationGames.length === 0) {
       return res.status(404).json({ message: "No se encontraron juegos para la tienda XBOX store" });
     }
     console.log("Cantidad de juegos encontrados para la tienda PlayStation store:", PlayStationGames.length); // Imprimir la cantidad de juegos encontrados
-    res.json(PlayStationGames);
+    res.json({
+      games: PlayStationGames,
+      totalPages: totalPages
+    });
     //console.log("Juegos de la tienda Steam:", steamGames);
   } catch (err) {
     console.error("Error:", err);
@@ -525,52 +547,16 @@ exports.findPlayStationGames = async (req, res) => {
   }
 };
 
-//JUEGOS APPSTORE
-exports.findAppStoreGames = async (req, res) => {
-  try {
-    const AppStoreGames = await Games.aggregate([
-      {
-        $match: {
-          "stores.store.id": 4
-        }
-      },
-      {
-        $project: {
-          "_id": 1,
-          "name": 1,
-          "rating": 1,
-          "released": 1,
-          "background_image": 1,
-          "genres.name": 1,
-          "platforms.platform": 1,
-          "reviews_count": 1,
-          "short_screenshots": 1,
-          "ratings": 1,
-          "stores": {
-            $filter: {
-              input: "$stores",
-              as: "store",
-              cond: { $eq: ["$$store.store.id", 4] } // Filtrar las tiendas y quedarse con la tienda 
-            }
-          }
-        }
-      }
-    ]);
 
-    if (AppStoreGames.length === 0) {
-      return res.status(404).json({ message: "No se encontraron juegos para la tienda AppStore" });
-    }
-    console.log("Cantidad de juegos encontrados para la tienda AppStore:", AppStoreGames.length); // Imprimir la cantidad de juegos encontrados
-    res.json(AppStoreGames);
-    //console.log("Juegos de la tienda Steam:", steamGames);
-  } catch (err) {
-    console.error("Error:", err);
-    res.status(500).json({ error: "Error en el servidor" });
-  }
-};
 
 //juegos gog store
 exports.findGOGStoreGames = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const pageSize = 20;
+  const totalGames = await Games.countDocuments({ "stores.store.id": 5 });
+  const totalPages = Math.ceil(totalGames / pageSize);
+
+  const skip = (page - 1) * pageSize;
   try {
     const GOGGames = await Games.aggregate([
       {
@@ -598,14 +584,19 @@ exports.findGOGStoreGames = async (req, res) => {
             }
           }
         }
-      }
+      },
+      {$skip: skip},
+      {$limit: pageSize}
     ]);
 
     if (GOGGames.length === 0) {
       return res.status(404).json({ message: "No se encontraron juegos para la tienda GOG" });
     }
     console.log("Cantidad de juegos encontrados para la tienda GOG:", GOGGames.length); // Imprimir la cantidad de juegos encontrados
-    res.json(GOGGames);
+    res.json({
+      games: GOGGames,
+      totalPages: totalPages
+    });
     //console.log("Juegos de la tienda Steam:", steamGames);
   } catch (err) {
     console.error("Error:", err);
@@ -613,8 +604,14 @@ exports.findGOGStoreGames = async (req, res) => {
   }
 };
 
-//NINTENDO STORE
+//App STORE
 exports.findAppStoreGames = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const pageSize = 20;
+  const totalGames = await Games.countDocuments({ "stores.store.id": 4 });
+  const totalPages = Math.ceil(totalGames / pageSize);
+
+  const skip = (page - 1) * pageSize;
   try {
     const AppStoreGames = await Games.aggregate([
       {
@@ -642,14 +639,19 @@ exports.findAppStoreGames = async (req, res) => {
             }
           }
         }
-      }
+      },
+      {$skip: skip},
+      {$limit: pageSize}
     ]);
 
     if (AppStoreGames.length === 0) {
       return res.status(404).json({ message: "No se encontraron juegos para la tienda AppStore" });
     }
     console.log("Cantidad de juegos encontrados para la tienda AppStore:", AppStoreGames.length); // Imprimir la cantidad de juegos encontrados
-    res.json(AppStoreGames);
+    res.json({
+      games: AppStoreGames,
+      totalPages: totalPages
+    });
     //console.log("Juegos de la tienda Steam:", steamGames);
   } catch (err) {
     console.error("Error:", err);
@@ -659,6 +661,12 @@ exports.findAppStoreGames = async (req, res) => {
 
 //juegos nintendo store
 exports.findNintendoStoreGames = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const pageSize = 20;
+  const totalGames = await Games.countDocuments({ "stores.store.id": 1 });
+  const totalPages = Math.ceil(totalGames / pageSize);
+
+  const skip = (page - 1) * pageSize;
   try {
     const NintendoGames = await Games.aggregate([
       {
@@ -686,14 +694,19 @@ exports.findNintendoStoreGames = async (req, res) => {
             }
           }
         }
-      }
+      },
+      {$skip: skip},
+      {$limit: pageSize}
     ]);
 
     if (NintendoGames.length === 0) {
       return res.status(404).json({ message: "No se encontraron juegos para la tienda Nintendo" });
     }
     console.log("Cantidad de juegos encontrados para la tienda Nintendo:", NintendoGames.length); // Imprimir la cantidad de juegos encontrados
-    res.json(NintendoGames);
+    res.json({
+      games: NintendoGames,
+      totalPages: totalPages
+    });
     //console.log("Juegos de la tienda Steam:", steamGames);
   } catch (err) {
     console.error("Error:", err);
@@ -703,6 +716,12 @@ exports.findNintendoStoreGames = async (req, res) => {
 
 //xbox 360 store
 exports.findXbox360Games = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const pageSize = 20;
+  const totalGames = await Games.countDocuments({ "stores.store.id": 1 });
+  const totalPages = Math.ceil(totalGames / pageSize);
+
+  const skip = (page - 1) * pageSize;
   try {
     const Xbox360Games = await Games.aggregate([
       {
@@ -730,14 +749,19 @@ exports.findXbox360Games = async (req, res) => {
             }
           }
         }
-      }
+      },
+      {$skip: skip},
+      {$limit: pageSize}
     ]);
 
     if (Xbox360Games.length === 0) {
       return res.status(404).json({ message: "No se encontraron juegos para la tienda Xbox360" });
     }
     console.log("Cantidad de juegos encontrados para la tienda Xbox360:", Xbox360Games.length); // Imprimir la cantidad de juegos encontrados
-    res.json(Xbox360Games);
+    res.json({
+      games: Xbox360Games,
+      totalPages: totalPages
+    });
     //console.log("Juegos de la tienda Steam:", steamGames);
   } catch (err) {
     console.error("Error:", err);
@@ -747,6 +771,12 @@ exports.findXbox360Games = async (req, res) => {
 
 //GOOGLE PLAY STORE
 exports.findGooglePlayGames = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const pageSize = 20;
+  const totalGames = await Games.countDocuments({ "stores.store.id": 1 });
+  const totalPages = Math.ceil(totalGames / pageSize);
+
+  const skip = (page - 1) * pageSize;
   try {
     const GooglePlayGames = await Games.aggregate([
       {
@@ -774,14 +804,19 @@ exports.findGooglePlayGames = async (req, res) => {
             }
           }
         }
-      }
+      },
+      {$skip: skip},
+      {$limit: pageSize}
     ]);
 
     if (GooglePlayGames.length === 0) {
       return res.status(404).json({ message: "No se encontraron juegos para la tienda Google PlayStore" });
     }
     console.log("Cantidad de juegos encontrados para la tienda Google PlayStore:", GooglePlayGames.length); // Imprimir la cantidad de juegos encontrados
-    res.json(GooglePlayGames);
+    res.json({
+      games: GooglePlayGames,
+      totalPages: totalPages
+    });
     //console.log("Juegos de la tienda Steam:", steamGames);
   } catch (err) {
     console.error("Error:", err);
@@ -791,6 +826,12 @@ exports.findGooglePlayGames = async (req, res) => {
 
 //ITCH STORE
 exports.findITCHGames = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const pageSize = 20;
+  const totalGames = await Games.countDocuments({ "stores.store.id": 1 });
+  const totalPages = Math.ceil(totalGames / pageSize);
+
+  const skip = (page - 1) * pageSize;
   try {
     const ITCHGames = await Games.aggregate([
       {
@@ -818,14 +859,19 @@ exports.findITCHGames = async (req, res) => {
             }
           }
         }
-      }
+      },
+      {$skip: skip},
+      {$limit: pageSize}
     ]);
 
     if (ITCHGames.length === 0) {
       return res.status(404).json({ message: "No se encontraron juegos para la tienda ITCH Store" });
     }
     console.log("Cantidad de juegos encontrados para la tienda ITCH Store:", ITCHGames.length); // Imprimir la cantidad de juegos encontrados
-    res.json(ITCHGames);
+    res.json({
+      games: ITCHGames,
+      totalPages: totalPages
+    });
     //console.log("Juegos de la tienda Steam:", steamGames);
   } catch (err) {
     console.error("Error:", err);
@@ -835,6 +881,12 @@ exports.findITCHGames = async (req, res) => {
 
 //epic games store
 exports.findEpicStooreGames = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const pageSize = 20;
+  const totalGames = await Games.countDocuments({ "stores.store.id": 1 });
+  const totalPages = Math.ceil(totalGames / pageSize);
+
+  const skip = (page - 1) * pageSize;
   try {
     const EpicGames = await Games.aggregate([
       {
@@ -862,14 +914,19 @@ exports.findEpicStooreGames = async (req, res) => {
             }
           }
         }
-      }
+      },
+      {$skip: skip},
+      {$limit: pageSize}
     ]);
 
     if (EpicGames.length === 0) {
       return res.status(404).json({ message: "No se encontraron juegos para la tienda Epic Games" });
     }
     console.log("Cantidad de juegos encontrados para la tienda Epic Games:", EpicGames.length); // Imprimir la cantidad de juegos encontrados
-    res.json(EpicGames);
+    res.json({
+      games: EpicGames,
+      totalPages: totalPages
+    });
     //console.log("Juegos de la tienda Steam:", steamGames);
   } catch (err) {
     console.error("Error:", err);
